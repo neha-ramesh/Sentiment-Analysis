@@ -1,82 +1,79 @@
-🎙️ Speech Emotion Analyzer 
-A deep learning-based system for recognizing human emotions from speech. This project uses LSTM neural network and Variational Autoencoder (VAE) to classify emotions such as happy, sad, angry, calm, etc., from audio files.
+# 🎙️ Speech Emotion Analyzer
 
-📂 Datasets Used
-This project uses well-known emotion datasets:
+A deep learning-based system for recognizing human emotions from speech 🎧.  
+This project uses **LSTM** and **Variational Autoencoder (VAE)** models to classify emotions such as:
 
-RAVDESS (2452 samples)
+> 😄 Happy &nbsp;&nbsp; 😢 Sad &nbsp;&nbsp; 😠 Angry &nbsp;&nbsp; 😨 Fearful &nbsp;&nbsp; 😲 Surprise &nbsp;&nbsp; 🤢 Disgust
 
-SAVEE (500 samples)
+---
 
-TESS (2800 samples)
+## 📂 Datasets Used
 
-Each dataset includes labeled audio clips corresponding to different emotions such as:
+We use four well-known speech emotion datasets:
 
-Happy
+| Dataset      | Samples | Emotions Included                                             | Gender    |
+|--------------|---------|--------------------------------------------------------------|-----------|
+| **RAVDESS**  | 2452    | Happy, Sad, Angry, Fearful, Surprise, Disgust                | Male, Female |
+| **SAVEE**    | 500     | Happy, Sad, Angry, Fearful, Surprise, Disgust                | Male      |
+| **TESS**     | 2800    | Happy, Sad, Angry, Fearful, Surprise, Disgust, Neutral       | Female    |
+| **CREMA-D**  | 7442    | Happy, Sad, Angry, Fearful, Disgust, Neutral                 | Male, Female |
+---
 
-Sad
+## 🎯 Features Extracted
 
-Angry
+From each audio sample, we extract meaningful features:
 
-Fearful
+- 🎼 **MFCC** – Captures timbre and tone
+- 🎹 **Chroma** – Pitch-based variations
+- 🔁 **ZCR** – Measures voice noisiness
+- ⚡ **TEO** – Detects energy bursts
+- 📈 **Pitch** – Indicates tone height
+- 🔊 **Energy** – Measures loudness
 
-Surprise
+> All features are normalized and stored in a dataframe for model input.
+---
 
-Disgust
+## 🧠 Model Architectures
 
-🎯 Features Extracted
-Features are extracted from each audio file and stored in a dataframe:
+### 🔁 LSTM
 
-MFCC (Mel Frequency Cepstral Coefficients) – Tone, timbre
+An LSTM model is used to capture **temporal patterns** in speech:
 
-Chroma – Pitch variation
+- `128` LSTM units → Dropout → Dense layer
+- Softmax activation for multiclass emotion classification
+- Trained on extracted features to learn emotion sequences over time
 
-Zero Crossing Rate (ZCR) – Noise measurement
+### 🌌 VAE + Classifier
 
-Teager Energy Operator (TEO) – Sudden energy bursts
+A **Variational Autoencoder (VAE)** reduces dimensionality and learns compressed emotion representations:
 
-Pitch – Frequency
+- Latent vectors from the VAE encoder are passed into an MLP classifier
+- Efficient at emotion classification with fewer parameters
+- Helps handle noise and redundancy in features
 
-Energy – Loudness
+---
 
-These features are statistically distributed and normalized to optimize learning.
+## 📊 Model Evaluation
 
-🧠 Model Architectures
-🔁 LSTM
-An LSTM model is used to capture the temporal patterns in speech features. It includes:
+### 📈 LSTM Model
+- ✅ **Training Accuracy:** `88.75%`
+- ✅ **Validation Accuracy:** `91.00%`
+- 📉 **Loss:** Steady decrease → Proper learning
+- ✅ **Confusion Matrix:** Strong on `happy`, `sad`, `angry`
+- 📋 **Classification Report:**
+  - Precision, Recall, F1-Score: **> 85%**
+  - Weighted F1 Score: **~91%**
 
-128 LSTM units, followed by dropout and dense layers
+### 🌌 VAE + Classifier
+- ✅ **Training Accuracy:** `82.50%`
+- ✅ **Validation Accuracy:** `84.75%`
+- 🌐 Performs well on `neutral` and `sad`
+- ⚠️ Slight confusion between `angry` and `disgust`
 
-Softmax output for multiclass emotion classification
+---
 
-Trained on MFCC and other features to learn sequential dependencies in speech
-
-🌌 VAE + Classifier
-A Variational Autoencoder (VAE) is used to reduce feature dimensions and extract compact emotional representations. These compressed features are then fed into a simple classifier (MLP) to predict emotions efficiently.
-
-📊 Model Evaluation
-LSTM Model:
-Training Accuracy: 88.75%
-
-Validation Accuracy: 91.00%
-
-Loss: Decreases steadily, indicating proper learning
-
-Confusion Matrix: Shows strong performance on happy, sad, and angry emotions
-
-Classification Report:
-
-Precision, Recall, F1-Score: All above 85% for major classes
-
-Weighted Average F1-Score: ~91%
-
-VAE + Classifier:
-Training Accuracy: 82.50%
-
-Validation Accuracy: 84.75%
-
-Used compressed latent vectors from VAE for classification
-
-Performed well on neutral and sad classes
-
-Slight confusion between angry and disgust
+## 🚀 Technologies Used
+- Python, NumPy, Pandas, Librosa
+- TensorFlow / Keras
+- Matplotlib & Seaborn (for visualizations)
+---
